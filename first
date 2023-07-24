@@ -1,0 +1,83 @@
+django-admin startproject myproject
+cd myproject
+python manage.py startapp myapp
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('page1/', views.page1, name='page1'),
+    path('page2/', views.page2, name='page2'),
+    path('admin-page/', views.admin_page, name='admin_page'),
+]
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.flatpages.models import FlatPage
+
+def home(request):
+    return render(request, 'home.html')
+
+def page1(request):
+    return render(request, 'page1.html')
+
+def page2(request):
+    return render(request, 'page2.html')
+
+@login_required
+def admin_page(request):
+    return render(request, 'admin_page.html')
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <h1>Home Page</h1>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page 1</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <h1>Page 1</h1>
+    {{ flatpage.content }}
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page 2</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        /* Custom CSS styles for page2 */
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Page 2</h1>
+    {{ flatpage.content }}
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <p>This page is accessible only to logged-in users with staff status.</p>
+</body>
+</html>
